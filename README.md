@@ -8,12 +8,21 @@ it will fetch them and base64-inline them.
 
 ## Usage
 
-```javscript
-import bundler from 'svgbundler'; // or:
-const bundler = require('svgbundler').default;
+```js
+import bundle from 'svgbundler'; // or:
+const bundle = require('svgbundler').default;
 
-bundler('<svg>...etc...</svg>').then((result) => {
-  // `result` is a string containing the newly bundled SVG
+const input = `
+  <svg>
+    <image xlink:href="https://upload.wikimedia.org/wikipedia/commons/5/52/Spacer.gif" />
+  </svg>
+";
+
+bundle(input).then((result) => {
+  console.log(result);
+  // <svg>
+  //   <image xlink:href="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAQAIBRAA7"/>
+  // </svg>
 });
 
 ```
