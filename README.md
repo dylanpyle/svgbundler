@@ -16,7 +16,7 @@ const input = `
   <svg>
     <image xlink:href="https://upload.wikimedia.org/wikipedia/commons/5/52/Spacer.gif" />
   </svg>
-";
+`;
 
 bundle(input).then((result) => {
   console.log(result);
