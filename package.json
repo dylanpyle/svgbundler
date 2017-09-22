@@ -1,15 +1,31 @@
 {
   "name": "svgbundler",
   "version": "1.1.0",
-  "description": "",
+  "description": "A small tool that will track down any dependencies of an SVG image and embed them inline.",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "make build-and-test"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ca-la/svgbundler.git"
+  },
+  "keywords": [
+    "svg",
+    "bundle",
+    "pack",
+    "resolve",
+    "inline",
+    "base64",
+    "images"
+  ],
+  "author": "Dylan Pyle <me@dylanpyle.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ca-la/svgbundler/issues"
+  },
+  "homepage": "https://github.com/ca-la/svgbundler#readme",
   "devDependencies": {
     "@types/xml2js": "0.4.0",
     "tslint": "5.7.0",
