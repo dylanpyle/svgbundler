@@ -15,9 +15,11 @@ test:
 .PHONY: release-min
 release-minor: build
 	npm version minor
+	npm publish
 
 .PHONY: release-patch
 release-patch: build
 	npm version patch
+	npm publish
 
 build-and-test: build test
