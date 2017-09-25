@@ -40,6 +40,12 @@ function parseAsync(str: string): Promise<object> {
   });
 }
 
+// `$` holds attrs of the node itself - e.g width in <svg width='100'>
+// `_` holds textual children - e.g "hi" in <svg>hi</svg>
+function isMetaNode(nodeName: string): boolean {
+  return ['$', '_'].indexOf(nodeName) > -1;
+}
+
 interface NodeWithMetadata {
   '$': {
     [key: string]: string;
@@ -71,7 +77,7 @@ async function walkTreeAndModify(
   const childNodeNames = Object.keys(node);
 
   for (const childNodeName of childNodeNames) {
-    if (childNodeName === '$') { continue; }
+    if (isMetaNode(childNodeName)) { continue; }
 
     const childNodes: SvgNode[] = node[childNodeName];
 
@@ -84,7 +90,10 @@ async function walkTreeAndModify(
 }
 
 async function bundle(svgData: string): Promise<string> {
+  if (!svgData) { return Promise.resolve(''); }
   const parsed = (await parseAsync(svgData) as SvgDataRoot);
+
+  if (!parsed.svg) { return Promise.resolve(''); }
 
   const newSvg = await walkTreeAndModify('svg', parsed.svg);
   const newObject = { svg: newSvg };

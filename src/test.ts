@@ -1,5 +1,11 @@
 import bundle from './index';
 
+const COLORS = {
+  green: '\x1b[32m',
+  red: '\x1b[31m',
+  reset: '\x1b[0m'
+};
+
 /* tslint:disable:max-line-length */
 /* tslint:disable:no-console */
 /* tslint:disable:object-literal-sort-keys */
@@ -58,22 +64,44 @@ const TEST_CASES: TestCase[] = [
     <image width="200" height="200" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${encodedImage}"/>
   </g>
 </svg>`
+  },
+
+  {
+    title: 'Empty SVGs are handled',
+    input: '',
+    expectedOutput: ''
+  },
+
+  {
+    title: 'SVGs with no elements are handled',
+    input: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg width="200" height="200">
+  Oh, hey there!
+</svg>`,
+    expectedOutput: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg width="200" height="200">
+  Oh, hey there!
+</svg>`
   }
 ];
 
 async function test(): Promise<void> {
   for (const testCase of TEST_CASES) {
-    console.log('');
+    process.stdout.write(`${testCase.title}...`);
+
     const actualOutput: string = await bundle(testCase.input);
 
     if (actualOutput === testCase.expectedOutput) {
-      console.log(`✅  Passed: ${testCase.title}`);
+      console.log(COLORS.green, 'Passed', COLORS.reset);
     } else {
-      console.log(`❌  Failed: ${testCase.title}\n`);
+      console.log(COLORS.red, 'Failed');
       console.log(`Expected:\n\n${testCase.expectedOutput}\n`);
-      console.log(`Actual:\n\n${actualOutput}\n`);
+      console.log(`Actual:\n\n${actualOutput}\n`, COLORS.reset);
     }
   }
 }
 
-test().catch(() => { console.log('Exiting'); });
+test().catch((err: Error) => {
+  console.log(COLORS.red, err, COLORS.reset);
+  console.log(COLORS.red, 'Exiting due to error', COLORS.reset);
+});
