@@ -52,6 +52,7 @@ const TEST_CASES: TestCase[] = [
       <image width="200" height="200" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${imageUrl}"/>
     </g>
     <image width="200" height="200" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${imageUrl}"/>
+    <image width="200" height="200" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${imageUrl}"/>
   </g>
 </svg>`,
     expectedOutput: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -61,6 +62,7 @@ const TEST_CASES: TestCase[] = [
     <g>
       <image width="200" height="200" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${encodedImage}"/>
     </g>
+    <image width="200" height="200" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${encodedImage}"/>
     <image width="200" height="200" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${encodedImage}"/>
   </g>
 </svg>`
@@ -74,14 +76,9 @@ const TEST_CASES: TestCase[] = [
 
   {
     title: 'SVGs with no elements are handled',
-    input: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<svg width="200" height="200">
-  Oh, hey there!
-</svg>`,
+    input: '<svg>Oh, hey there!</svg>',
     expectedOutput: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<svg width="200" height="200">
-  Oh, hey there!
-</svg>`
+<svg>Oh, hey there!</svg>`
   }
 ];
 

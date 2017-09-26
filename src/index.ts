@@ -3,6 +3,8 @@ import * as xml2js from 'xml2js';
 
 type PromiseFn = (data: any) => void;
 
+const META_NODE_NAME = '$';
+
 function constructEncodedImage(
   mimetype: string | undefined = 'application/octet-stream',
   content: string
@@ -40,12 +42,6 @@ function parseAsync(str: string): Promise<object> {
   });
 }
 
-// `$` holds attrs of the node itself - e.g width in <svg width='100'>
-// `_` holds textual children - e.g "hi" in <svg>hi</svg>
-function isMetaNode(nodeName: string): boolean {
-  return ['$', '_'].indexOf(nodeName) > -1;
-}
-
 interface NodeWithMetadata {
   '$': {
     [key: string]: string;
@@ -68,6 +64,10 @@ async function walkTreeAndModify(
   nodeName: string,
   node: SvgNode
 ): Promise<SvgNode> {
+  if (typeof node !== 'object') {
+    return node;
+  }
+
   const meta = node.$;
 
   if (nodeName === 'image' && meta['xlink:href']) {
@@ -77,7 +77,7 @@ async function walkTreeAndModify(
   const childNodeNames = Object.keys(node);
 
   for (const childNodeName of childNodeNames) {
-    if (isMetaNode(childNodeName)) { continue; }
+    if (childNodeName === META_NODE_NAME) { continue; }
 
     const childNodes: SvgNode[] = node[childNodeName];
 
