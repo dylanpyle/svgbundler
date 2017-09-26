@@ -79,6 +79,33 @@ const TEST_CASES: TestCase[] = [
     input: '<svg>Oh, hey there!</svg>',
     expectedOutput: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <svg>Oh, hey there!</svg>`
+  },
+
+  {
+    title: 'Element order is maintained',
+    input: `<svg>
+  <rect width="10"/>
+  <circle width="20"/>
+  <rect width="30"/>
+  <circle width="40"/>
+  <rect width="50"/>
+</svg>
+`,
+    expectedOutput: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg>
+  <rect width="10"/>
+  <circle width="20"/>
+  <rect width="30"/>
+  <circle width="40"/>
+  <rect width="50"/>
+</svg>`
+  },
+
+  {
+    title: 'SVGs with no elements are handled',
+    input: '<svg>Oh, hey there!</svg>',
+    expectedOutput: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg>Oh, hey there!</svg>`
   }
 ];
 

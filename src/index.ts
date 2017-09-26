@@ -35,7 +35,12 @@ function getData(url: string): Promise<string> {
 
 function parseAsync(str: string): Promise<object> {
   return new Promise((resolve: PromiseFn, reject: PromiseFn): void => {
-    xml2js.parseString(str, (err: Error | null, result: object) => {
+    const parser = new xml2js.Parser({
+      explicitChildren: true,
+      preserveChildrenOrder: true
+    });
+
+    parser.parseString(str, (err: Error | null, result: object) => {
       if (err) { return reject(err); }
       return resolve(result);
     });
