@@ -12,6 +12,7 @@ const COLORS = {
 
 // Probably will want to swap these out for something a bit more stable in future
 const imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/5/52/Spacer.gif' ;
+const httpImageUrl = imageUrl.replace(/https/, 'http');
 const encodedImage = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAQAIBRAA7';
 
 interface TestCase {
@@ -79,6 +80,17 @@ const TEST_CASES: TestCase[] = [
     input: '<svg>Oh, hey there!</svg>',
     expectedOutput: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <svg>Oh, hey there!</svg>`
+  },
+
+  {
+    title: 'SVGs with HTTP images are bundled',
+    input: `<svg>
+  <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${httpImageUrl}" />
+</svg>`,
+    expectedOutput: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg>
+  <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="${encodedImage}"/>
+</svg>`
   }
 ];
 
