@@ -22,8 +22,10 @@ test: build run-built-tests
 release-minor: build
 	npm version minor
 	npm publish
+	git push --tags
 
 .PHONY: release-patch
 release-patch: build
 	npm version patch
 	npm publish
+	git push --tags
