@@ -1,4 +1,5 @@
-import * as https from 'https';
+import * as request from 'request';
+import * as http from 'http';
 import * as xml2js from 'xml2js';
 
 type PromiseFn = (data: any) => void;
@@ -13,22 +14,20 @@ function constructEncodedImage(
 }
 
 function getData(url: string): Promise<string> {
-  return new Promise((resolve: PromiseFn): void => {
-    https.get(url, (message: https.IncomingMessage) => {
-      let data = '';
+  return new Promise((resolve: PromiseFn, reject: PromiseFn): void => {
+    const options = { encoding: 'base64', url };
 
-      message.setEncoding('base64');
+    request(options, (
+      err: Error | null,
+      response: http.IncomingMessage,
+      body: string
+    ) => {
+      if (err) { return reject(err); }
 
-      message.on('data', (chunk: Buffer) => {
-        data += chunk.toString();
-      });
-
-      message.on('end', () => {
-        // Per node docs, duplicate content-type headers are discarded
-        // https://nodejs.org/api/http.html#http_message_headers
-        const mimetype = (message.headers['content-type'] as string | undefined);
-        resolve(constructEncodedImage(mimetype, data));
-      });
+      // Per node docs, duplicate content-type headers are discarded
+      // https://nodejs.org/api/http.html#http_message_headers
+      const mimetype = (response.headers['content-type'] as string | undefined);
+      resolve(constructEncodedImage(mimetype, body));
     });
   });
 }

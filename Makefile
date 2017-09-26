@@ -6,11 +6,17 @@ lint:
 
 .PHONY: build
 build:
-	$$(npm bin)/tsc
+	@echo -n 'Compiling... '
+	@$$(npm bin)/tsc
+	@echo 'Done'
+
+.PHONY: run-built-tests
+run-built-tests:
+	@echo 'Running tests... '
+	@node dist/test.js
 
 .PHONY: test
-test:
-	node dist/test.js
+test: build run-built-tests
 
 .PHONY: release-min
 release-minor: build
@@ -21,5 +27,3 @@ release-minor: build
 release-patch: build
 	npm version patch
 	npm publish
-
-build-and-test: build test
